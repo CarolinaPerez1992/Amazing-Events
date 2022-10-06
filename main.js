@@ -1,5 +1,5 @@
 const container = document.getElementById("container")
-const print = printCard(events, container)
+const print = printCard(amazingevents.events, container)
 
 function printCard(events, element){
     for( let event of events ){

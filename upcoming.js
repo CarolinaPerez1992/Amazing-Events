@@ -1,6 +1,6 @@
 const container = document.getElementById("container")
-const currentDate = "2022-01-01"
-const upcoming = filterCard(events, currentDate)
+const currentDate = amazingevents.currentDate
+const upcoming = filterCard(amazingevents.events, currentDate)
 const print = printCard(upcoming, container)
 
 function filterCard(array, date ){
