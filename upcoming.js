@@ -1,7 +1,7 @@
 const container = document.getElementById("container")
 const currentDate = amazingevents.currentDate
 const upcoming = filterCard(amazingevents.events, currentDate)
-const print = printCard(upcoming, container)
+printCard(upcoming, container)
 
 function filterCard(array, date ){
     let filtrados = []
