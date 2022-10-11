@@ -24,7 +24,6 @@ function printCard(events, element){
             <a href="#" class="btn btn-primary">Details</a>
         </div>
     </div>
-
     `
 }
 }
