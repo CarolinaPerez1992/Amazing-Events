@@ -21,7 +21,7 @@ function printCard(events, element){
         <div class="card-body">
             <h5 class="card-title">${event.category}</h5>
             <p class="card-text">${event.description}</p>
-            <a href="#" class="btn btn-primary">Details</a>
+            <a href="../html/details.html" class="btn btn-primary">Details</a>
         </div>
     </div>
     `
