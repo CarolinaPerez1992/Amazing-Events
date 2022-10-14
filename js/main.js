@@ -19,11 +19,12 @@ amazingevents.events.forEach(printCard)
 
 const categories = new Set(amazingevents.events.map((event)=> event.category))
 
-const category = new Set(categories)
+// const category = new Set(categories)
 
 const checkBox = document.getElementById("category")
+console.log(checkBox)
 
-category.forEach((category)=>{
+categories.forEach((category)=>{
     checkBox.innerHTML += `
     <div class="form-check form-check-inline js-check">
         <input class="form-check-input" type="checkbox" value="${category}">
@@ -32,38 +33,55 @@ category.forEach((category)=>{
      `
 })
 
+let applied = {}
+
+function filter(fn, value) {
+    
+    let categorias = amazingevents.events
+    
+    
+    applied[fn] = value
+    console.log(applied)
+    for (let name in applied) {
+        if (name == 'isCategory') {
+            categorias = categorias.filter(categoria => categoria.category.includes(applied[name]))
+        }
+
+        if (name == 'matchesWithText') {
+            categorias = categorias.filter(categoria => categoria.name.toLowerCase().includes(applied[name].toLowerCase()))
+        }
+    }
+    return categorias
+}
+
 function updateEventslist(element, data, fn) {
     element.innerHTML = ''
     data.forEach(fn)
 }
 
+const inputCheckBox = document.querySelectorAll('input[type="checkbox"]')
+console.log(inputCheckBox)
 // const input = document.querySelector(".js-check")
 // console.log(input)
 // console.log(checkBox)
-checkBox.addEventListener('change', (e) =>{
-   let categorias= amazingevents.events.filter((value)=>value.category.includes(e.target.value))
+let checked=[]
+for(let i = 0; i< inputCheckBox.length; i++){
+inputCheckBox[i].addEventListener('click', (e) =>{
+    if(e.target.checked){
+// inputCheckBox.addEventListener('change', (e) =>{
+   let categorias= filter('isCategory',e.target.value)
    console.log(categorias)
 //    container.innerHTML = ''
 //    categorias.forEach(printCard)
-updateEventslist(container, categorias, printCard )
+updateEventslist(container, categorias, printCard)
+    }
 })
+}
+
 
 const inputSearch = document.getElementById('js-search')
 
 inputSearch.addEventListener('input',(e)=>{
-    let categorias = amazingevents.events.filter((event)=> event.name.toLowerCase().includes(e.target.value.toLowerCase()))
+    let categorias = filter('matchesWithText',e.target.value)
     updateEventslist(container, categorias, printCard )
 })
-// function printCheckBox(event){
-//     checkBox.innerHTML += `
-//     <div class="form-check form-check-inline">
-//         <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="${event.category}">
-//         <label class="form-check-label" for="inlineCheckbox1">${event.category}</label>
-//     </div>
-//     `
-// }
-// amazingevents.events.forEach(printCheckBox)
-
-// let categoryFilter = amazingevents.events.filter((value)=>{
-//     if(value.category === categor)
-// }
