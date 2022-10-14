@@ -1,5 +1,4 @@
 const container = document.getElementById("container")
-//const print = printCard(amazingevents.events, container)
 
 
 function printCard(event){
@@ -18,19 +17,42 @@ amazingevents.events.forEach(printCard)
 
 //task4
 
-const categories = amazingevents.events.map((event)=> event.category)
-// .reduce((a, b)=> a + b, [])
+const categories = new Set(amazingevents.events.map((event)=> event.category))
 
 const category = new Set(categories)
 
 const checkBox = document.getElementById("category")
+
 category.forEach((category)=>{
     checkBox.innerHTML += `
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="${category}">
+    <div class="form-check form-check-inline js-check">
+        <input class="form-check-input" type="checkbox" value="${category}">
         <label class="form-check-label" for="inlineCheckbox1">${category}</label>
     </div>
      `
+})
+
+function updateEventslist(element, data, fn) {
+    element.innerHTML = ''
+    data.forEach(fn)
+}
+
+// const input = document.querySelector(".js-check")
+// console.log(input)
+// console.log(checkBox)
+checkBox.addEventListener('change', (e) =>{
+   let categorias= amazingevents.events.filter((value)=>value.category.includes(e.target.value))
+   console.log(categorias)
+//    container.innerHTML = ''
+//    categorias.forEach(printCard)
+updateEventslist(container, categorias, printCard )
+})
+
+const inputSearch = document.getElementById('js-search')
+
+inputSearch.addEventListener('input',(e)=>{
+    let categorias = amazingevents.events.filter((event)=> event.name.toLowerCase().includes(e.target.value.toLowerCase()))
+    updateEventslist(container, categorias, printCard )
 })
 // function printCheckBox(event){
 //     checkBox.innerHTML += `
@@ -45,4 +67,3 @@ category.forEach((category)=>{
 // let categoryFilter = amazingevents.events.filter((value)=>{
 //     if(value.category === categor)
 // }
-// )
