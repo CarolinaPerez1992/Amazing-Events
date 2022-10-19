@@ -72,6 +72,7 @@ function updateEventslist(element, data, fn) {
 
 const inputCheckBox = document.querySelectorAll('input[type="checkbox"]')
 console.dir(inputCheckBox)
+activ = []
 
 console.log(inputCheckBox.length);
 for (let i = 0; i < inputCheckBox.length; i++) {
