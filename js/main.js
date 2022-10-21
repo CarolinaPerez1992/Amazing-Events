@@ -18,11 +18,13 @@ amazingevents.events.forEach(printCard)
 
 //task4
 
-const categories = new Set(amazingevents.events.map((event)=> event.category))
+let categories = new Set(amazingevents.events.map((event)=> event.category))
+categories = [...categories]
 
 // const category = new Set(categories)
 
-const checkBox = document.getElementById("category")
+let checkBox = document.getElementById("category")
+
 console.log(checkBox)
 
 categories.forEach((category)=>{
@@ -34,136 +36,46 @@ categories.forEach((category)=>{
      `
 })
 
-let applied = {}
-
-function filter(fn, value) {
-    
-    let events = amazingevents.events
-    
-    
-    applied[fn] = value
-    console.log(applied)
-    for (let name in applied) {
-        if (name == 'isCategory') {
-            events = events.filter(categoria => categoria.category.includes(applied[name]))
-        }
-
-        if (name == 'matchesWithText') {
-            events = events.filter(categoria => categoria.name.toLowerCase().includes(applied[name].toLowerCase()))
-        }
-    }
-    return events
-}
-
-function updateEventslist(element, data, fn) {
-    element.innerHTML = ''
-    data.forEach(fn)
-}
-
-const inputCheckBox = document.querySelectorAll('input[type="checkbox"]')
-console.log(inputCheckBox)
-// const input = document.querySelector(".js-check")
-let checked=[]
-
-for(let i = 0; i< inputCheckBox.length; i++){
-inputCheckBox[i].addEventListener('click', (e) =>{
-    if(e.target.checked){
-        
-   let categorias= filter('isCategory',e.target.value)
-   console.log(categorias)
-
-updateEventslist(container, categorias, printCard)
-    }
-})
-}
-
-// let applied = {}
-// let arr = []
-// function filter(fn, value) {
-
-//     let categorias = amazingevents.events
-
-
-//     applied[fn] = value
-//     console.log(applied)
-//     for (let name in applied) {
-//         if (name == 'isCategory') {
-//             categorias = categorias.filter(categoria => categoria.category.includes(applied[name]))
-
-//             arr = [...arr, ...categorias]
-//             console.dir(arr);
-//         }
-
-//         if (name == 'matchesWithText') {
-            
-//             categorias = categorias.filter(categoria => categoria.name.toLowerCase().includes(applied[name].toLowerCase()))
-//             console.log(name)
-//             console.log(arr)
-//             arr = [...arr, ...categorias]
-//             // search = [...arr, ...categorias]
-//             console.log(categorias)
-//             // console.log(search);
-//         }
-//     }
-//     return categorias
-// }
-
-// function updateEventslist(element, data, fn) {
-//     element.innerHTML = ''
-//     data.forEach(fn)
-// }
-
-
-// const inputCheckBox = document.querySelectorAll('input[type="checkbox"]')
-// console.dir(inputCheckBox)
-
-// console.log(inputCheckBox.length);
-// for (let i = 0; i < inputCheckBox.length; i++) {
-//     inputCheckBox[i].addEventListener('click', (e) => {
-//         if (e.target.checked) {
-//             activ.push(e.target.value);
-//             let categorias = filter('isCategory', e.target.value)
-//             console.log("categorias")
-//             /* console.dir(categorias)  */
-//             //    container.innerHTML = ''
-//             //    categorias.forEach(printCard)
-//             updateEventslist(container, arr, printCard)
-
-//         }
-//         else if (!e.target.checked) {
-//             console.log("hmm")
-//             activ = activ.filter(element => element !== e.target.value);
-//             console.dir(arr)
-//             let arr2 = []
-//             arr.map(element => {
-//                 if (activ.includes(element.category)) {
-//                     arr2.push(element)
-//                     arr2 = [...new Set(arr2)]
-//                     console.log('arr2')
-//                     console.dir(arr2);
-//                 }
-//             })
-//             arr = arr2
-//             updateEventslist(container, arr, printCard)
-//             // let categorias = filter('isCategory', e.target.value)
-//             // console.log(categorias)
-
-//             if (arr.length == 0) {
-//                 /*  console.log("xddd") */
-//                 amazingevents.events.forEach(printCard)
-//             }
-//         }
-
-//         console.log('active')
-//         console.dir(activ);
-//     })
-// }
-
-
+const inputCheckBox = Array.from(document.querySelectorAll('input[type="checkbox"]'))
+//Array.from es otra manera de pasar el contenido a array
 
 const inputSearch = document.getElementById('js-search')
 
-inputSearch.addEventListener('input',(e)=>{
-    let categorias = filter('matchesWithText',e.target.value)
-    updateEventslist(container, categorias, printCard )
-})
+inputCheckBox.forEach(e => e.addEventListener("click", filterCards))
+inputSearch.addEventListener('input', filterCards)
+
+function filterCards(){
+    let checkFilter = checkBoxFilter(amazingevents.events)
+    console.log(checkFilter)
+    let crossFilters = searchFilter(checkFilter, inputSearch.value)
+    console.log(inputSearch.value)
+    console.log(crossFilters)
+    if(crossFilters.length > 0){
+        container.innerHTML = ""
+    }
+    crossFilters.forEach(printCard)
+}
+
+function checkBoxFilter(evento){
+    let checkBoxFilters = inputCheckBox.filter(check=> check.checked).map(check => check.value)
+    if(checkBoxFilters.length > 0){
+        let checkBox = evento.filter(event => checkBoxFilters.includes(event.category))
+        return checkBox
+    }
+    return evento
+}
+
+function searchFilter(array, element){
+   let searchFilters = array.filter(event => event.name.toLowerCase().includes(element))
+   if(searchFilters.length 
+    === 0){
+    container.innerHTML = `
+    <h1>No obtuvimos resultados en su búsqueda</h1>
+    `
+    return []
+   }
+   return searchFilters
+}
+//categorias = categorias.filter(categoria => categoria.name.toLowerCase().includes(applied[name].toLowerCase()))
+
+
