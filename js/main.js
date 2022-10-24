@@ -1,5 +1,72 @@
 const container = document.getElementById("container")
 
+async function fetchApi(){
+    try{
+        let res = await fetch("https://mind-hub.up.railway.app/amazing")
+        data = await res.json()
+        console.log(res)
+        data = data.events
+        console.log(data)
+        data.forEach(printCard)
+        let categories = new Set(data.map((event)=> event.category))
+        categories = [...categories]
+        let checkBox = document.getElementById("category")
+        console.log(checkBox)
+        
+        categories.forEach((category)=>{
+            checkBox.innerHTML += `
+            <div class="form-check form-check-inline js-check">
+                <input class="form-check-input" type="checkbox" value="${category}">
+                <label class="form-check-label" for="inlineCheckbox1">${category}</label>
+            </div>
+            `
+        })
+        const inputCheckBox = Array.from(document.querySelectorAll('input[type="checkbox"]'))
+        //Array.from es otra manera de pasar el contenido a array
+
+        const inputSearch = document.getElementById('js-search')
+
+        inputCheckBox.forEach(e => e.addEventListener("click", filterCards))
+        inputSearch.addEventListener('input', filterCards)
+
+        function filterCards(){
+            let checkFilter = checkBoxFilter(data)
+            console.log(checkFilter)
+            let crossFilters = searchFilter(checkFilter, inputSearch.value)
+            console.log(inputSearch.value)
+            console.log(crossFilters)
+            if(crossFilters.length > 0){
+                container.innerHTML = ""
+            }
+            crossFilters.forEach(printCard)
+        }
+
+        function checkBoxFilter(evento){
+            let checkBoxFilters = inputCheckBox.filter(check=> check.checked).map(check => check.value)
+            if(checkBoxFilters.length > 0){
+                let checkBox = evento.filter(event => checkBoxFilters.includes(event.category))
+                return checkBox
+            }
+            return evento
+        }
+
+        function searchFilter(array, element){
+        let searchFilters = array.filter(event => event.name.toLowerCase().includes(element))
+        if(searchFilters.length 
+            === 0){
+            container.innerHTML = `
+            <h1>No obtuvimos resultados en su búsqueda</h1>
+            `
+            return []
+        }
+        return searchFilters
+        }
+        return data
+    } catch(err){
+        console.log(err)
+    }
+}
+fetchApi()
 
 function printCard(event){
     container.innerHTML += `
@@ -14,68 +81,6 @@ function printCard(event){
     </div>
     `
 }
-amazingevents.events.forEach(printCard)
 
-//task4
-
-let categories = new Set(amazingevents.events.map((event)=> event.category))
-categories = [...categories]
-
-// const category = new Set(categories)
-
-let checkBox = document.getElementById("category")
-
-console.log(checkBox)
-
-categories.forEach((category)=>{
-    checkBox.innerHTML += `
-    <div class="form-check form-check-inline js-check">
-        <input class="form-check-input" type="checkbox" value="${category}">
-        <label class="form-check-label" for="inlineCheckbox1">${category}</label>
-    </div>
-     `
-})
-
-const inputCheckBox = Array.from(document.querySelectorAll('input[type="checkbox"]'))
-//Array.from es otra manera de pasar el contenido a array
-
-const inputSearch = document.getElementById('js-search')
-
-inputCheckBox.forEach(e => e.addEventListener("click", filterCards))
-inputSearch.addEventListener('input', filterCards)
-
-function filterCards(){
-    let checkFilter = checkBoxFilter(amazingevents.events)
-    console.log(checkFilter)
-    let crossFilters = searchFilter(checkFilter, inputSearch.value)
-    console.log(inputSearch.value)
-    console.log(crossFilters)
-    if(crossFilters.length > 0){
-        container.innerHTML = ""
-    }
-    crossFilters.forEach(printCard)
-}
-
-function checkBoxFilter(evento){
-    let checkBoxFilters = inputCheckBox.filter(check=> check.checked).map(check => check.value)
-    if(checkBoxFilters.length > 0){
-        let checkBox = evento.filter(event => checkBoxFilters.includes(event.category))
-        return checkBox
-    }
-    return evento
-}
-
-function searchFilter(array, element){
-   let searchFilters = array.filter(event => event.name.toLowerCase().includes(element))
-   if(searchFilters.length 
-    === 0){
-    container.innerHTML = `
-    <h1>No obtuvimos resultados en su búsqueda</h1>
-    `
-    return []
-   }
-   return searchFilters
-}
-//categorias = categorias.filter(categoria => categoria.name.toLowerCase().includes(applied[name].toLowerCase()))
 
 
