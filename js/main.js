@@ -2,7 +2,7 @@ const container = document.getElementById("container")
 
 async function fetchApi(){
     try{
-        let res = await fetch("https://mind-hub.up.railway.app/amazing")
+        let res = await fetch("https://mh-amazing.herokuapp.com/amazing")
         data = await res.json()
         console.log(res)
         data = data.events

@@ -1,3 +1,30 @@
+async function getEvent(){
+  let id = location.search.slice(4)
+}
+// function sumarGanancias(elemento1,elemento2) {
+//   let sumaDeGanancias = elemento1.renenues +elemento2.renenues 
+//   let subTotal = { 
+//       ganancia: sumaDeGanancias
+//   }
+//   return subTotal 
+// }
+
+// function sumarGanancia(elemento1,elemento2) {
+//   let sumaDeGanancias = elemento1.renenues + elemento2.renenues 
+//   let subTotal = { 
+//       ganancia: sumaDeGanancias
+//   }
+//   return subTotal 
+// }
+// let zero = {ganancia: 0}
+// data.forEach(category=> {
+//   if(category.category === categories){
+//       let gananciaTotal =data.reduce((ganancia1, ganancia2)=> sumarGanancia(ganancia1, ganancia2), zero
+//       )
+//       return gananciaTotal
+//   }
+// })
+
 
 let captura = location.search
 console.log(captura)
