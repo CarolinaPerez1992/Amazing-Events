@@ -26,7 +26,7 @@ async function fetchApiPast(){
         console.log(data)
         data.map(everyEvent =>{
             everyEvent.renenues = everyEvent.price * everyEvent.assistance
-            everyEvent.percentage = everyEvent.assistance / everyEvent.capacity
+            everyEvent.percentage = 100 *(everyEvent.assistance / everyEvent.capacity)
         })
         console.log(data)
         //assistance
@@ -49,33 +49,53 @@ async function fetchApiPast(){
 
         //categorias
         //falta el get
-
+        let past = document.getElementById("past")
+        
         let categories = new Set(data.map((event)=> event.category))
         categories = [...categories]
         console.log(categories)
-        let itemCategory = document.getElementById("past")
-        categories.forEach((evento) => {
-            itemCategory.innerHTML += `
-            <td>${evento}</td>
+        let stats = categories.map(category => {
+            let filter = data.filter(evento => evento.category === category)
+            return acumulador(filter)
+        })
+        stats.forEach(element => {
+            past.innerHTML += `
+            <tr>
+                <td>${element.category}</td>
+                <td>${element.renenues}</td>
+                <td>${parseInt(element.percentage)}%</td>
+            
+            </tr>
             `
         })
-        console.log(data)
-        function sumarGanancia(elemento1,elemento2) {
-            let sumaDeGanancias = elemento1.renenues + elemento2.renenues 
-            let subTotal = { 
-                ganancia: sumaDeGanancias
-            }
-            return subTotal 
+
+        function acumulador(array) {
+        let inicio = {
+        category: "",
+        renenues: 0,
+        capacity: 0,
+        assistance: 0,
+        // percentage: 0,
+        } 
+        let sumas = array.reduce((elemento1, elemento2) =>{
+        return{
+            category: elemento2.category,
+            renenues: elemento1.renenues + elemento2.renenues,
+            capacity: elemento1.capacity + elemento2.capacity,
+            assistance: elemento1.assistance + elemento2.assistance,
+            // percentage: (elemento1.percentage + elemento2.percentage)
         }
-        let zero = {ganancia: 0}
-        data.forEach(category=> {
-            if(category.category === categories){
-                let gananciaTotal =data.reduce((ganancia1, ganancia2)=> sumarGanancia(ganancia1, ganancia2), zero
-                )
-            }
-        })
-        // console.log(category)
-        // console.log(categories)
+        }, inicio)
+        // stats.promedio = (100 * stats[propiedad] / stats.capacity)
+        sumas.percentage = 100 *(sumas.assistance / sumas.capacity)
+        console.log(sumas.capacity)
+        console.log(sumas.assistance)
+        console.log(sumas.category.length)
+        console.log(sumas.percentage)
+
+        return sumas
+    }
+        
         return data
         }
         catch(err){
@@ -93,20 +113,54 @@ async function fetchApiUpcoming(){
         console.log(data)
         data.map(everyEvent =>{
             everyEvent.renenues = everyEvent.price * everyEvent.estimate
-            everyEvent.percentage = everyEvent.estimate / everyEvent.capacity
+            everyEvent.percentage = 100 * (everyEvent.estimate / everyEvent.capacity)
         })
+        let upcoming = document.getElementById("upcoming")
         let categories = new Set(data.map((event)=> event.category))
         categories = [...categories]
         console.log(categories)
-        let itemCategory = document.getElementById("upcoming")
-        categories.forEach((evento) => {
-            itemCategory.innerHTML += `
-            <td>${evento}</td>
+        let stats = categories.map(category => {
+            let filter = data.filter(evento => evento.category === category)
+            return acumulador(filter)
+        })
+        stats.forEach(element => {
+            upcoming.innerHTML += `
+            <tr>
+                <td>${element.category}</td>
+                <td>${element.renenues}</td>
+                <td>${parseInt(element.percentage)}%</td>
+            
+            </tr>
             `
         })
+
+        function acumulador(array) {
+        let inicio = {
+        category: "",
+        renenues: 0,
+        capacity: 0,
+        estimate: 0,
+        // percentage: 0,
+        } 
+        let sumas = array.reduce((elemento1, elemento2) =>{
+        return{
+            category: elemento2.category,
+            renenues: elemento1.renenues + elemento2.renenues,
+            capacity: elemento1.capacity + elemento2.capacity,
+            estimate: elemento1.estimate + elemento2.estimate,
+            // percentage: (elemento1.percentage + elemento2.percentage)
+        }
+        }, inicio)
+        sumas.percentage = 100 *(sumas.estimate / sumas.capacity)
+        // sumas.percentage = percentage/ sumas.category.length
+        console.log(sumas.estimate)
+        console.log(sumas.category.length)
+        console.log(sumas.percentage)
+
+        return sumas
+    }
+        
+        return data
 }catch(e){console.log(e)}
 }
 fetchApiUpcoming()
-
-
-
